@@ -1,0 +1,112 @@
+name: Auto label issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  labelIssue:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Label issues
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const issueBody = context.payload.issue.body;
+          const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+          // Extract Build Date vars (for safety checks)
+          const buildDateMatch = issueBody.match(/Build Date\s*\n*(\d+)-(\d+)-(UNOFFICIAL)-(\w+)/i);
+          const buildLosVersion = buildDateMatch ? buildDateMatch[1] : null;
+          const buildDeviceName = buildDateMatch ? buildDateMatch[4] : null;
+
+          // Extract device label
+          const deviceLabelMatch = issueBody.match(/Device\s*(\w+)/i);
+          const deviceLabel = deviceLabelMatch ? deviceLabelMatch[1] : null;
+
+          // Extract LineageOS Version label
+          const losLabelMatch = issueBody.match(/LineageOS Version\s*([\w-]+)/i);
+          const losLabel = losLabelMatch ? losLabelMatch[1] : null;
+
+          // Create labels if they do not exist
+          if (deviceLabel && losLabel) {
+            github.rest.issues.getLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: deviceLabel,
+            }).catch(async () => {
+              github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: deviceLabel,
+                color: 'dcaef5',
+              }).catch((error) => {
+                console.log(`Failed to create label: ${deviceLabel}, error: ${error.message}`);
+              });
+            });
+
+            github.rest.issues.getLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: losLabel,
+            }).catch(async () => {
+              github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: losLabel,
+                color: '81db8d',
+              }).catch((error) => {
+                console.log(`Failed to create label: ${losLabel}, error: ${error.message}`);
+              });
+            });
+          }
+
+          // Remove all labels
+          github.rest.issues.removeAllLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          }).catch(error => {
+            console.log(`Failed to remove labels: ${error.message}`);
+          });
+
+          // HACK: sleep for 5 seconds
+          await sleep(5000);
+
+          // Validate ticket
+          if (losLabel.split('-')[1] !== buildLosVersion || deviceLabel !== buildDeviceName) {
+            // Mark issue as invalid
+            github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['invalid'],
+            });
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
+            });
+          } else {
+            // Assign issue to a specific user
+            github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: ['ItsVixano'],
+            });
+          }
+
+          if (deviceLabel && losLabel) {
+            // Add labels to issue
+            github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: [deviceLabel, losLabel],
+            });
+          }
