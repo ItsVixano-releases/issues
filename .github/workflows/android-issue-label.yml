@@ -90,6 +90,14 @@ jobs:
               issue_number: context.issue.number,
               body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
             });
+
+            // Close the issue
+            github.rest.issues.update({
+              ...repoInfo,
+              issue_number: context.issue.number,
+              state: 'closed',
+              state_reason: 'not_planned',
+            });
           } else {
             //
             // The issue is valid !!
@@ -99,6 +107,13 @@ jobs:
               ...repoInfo,
               issue_number: context.issue.number,
               assignees: ['ItsVixano'],
+            });
+
+            // Open the issue
+            github.rest.issues.update({
+              ...repoInfo,
+              issue_number: context.issue.number,
+              state: 'open',
             });
 
             // Add Device & LosVersion labels to issue
