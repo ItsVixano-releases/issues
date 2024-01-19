@@ -14,8 +14,37 @@ jobs:
       uses: actions/github-script@v5
       with:
         script: |
+          // Vars
           const issueBody = context.payload.issue.body;
           const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+          const repoInfo = {
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          };
+
+          // Functions
+          function issuesGenLabel(label, color) {
+            github.rest.issues.getLabel({
+              ...repoInfo,
+              name: label,
+            }).catch(async () => {
+              github.rest.issues.createLabel({
+                ...repoInfo,
+                name: label,
+                color: color,
+              }).catch((error) => {
+                console.log(`Failed to create label: ${label}, error: ${error.message}`);
+              });
+            });
+          }
+
+          function issuesAddLabels(labels) {
+            github.rest.issues.addLabels({
+              ...repoInfo,
+              issue_number: context.issue.number,
+              labels: labels,
+            });
+          }
 
           // Extract Build Date vars (for safety checks)
           const buildDateMatch = issueBody.match(/Build Date\s*\n*(\d+)-(\d+)-(UNOFFICIAL)-(\w+)/i);
@@ -32,41 +61,13 @@ jobs:
 
           // Create labels if they do not exist
           if (deviceLabel && losLabel) {
-            github.rest.issues.getLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: deviceLabel,
-            }).catch(async () => {
-              github.rest.issues.createLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                name: deviceLabel,
-                color: 'dcaef5',
-              }).catch((error) => {
-                console.log(`Failed to create label: ${deviceLabel}, error: ${error.message}`);
-              });
-            });
-
-            github.rest.issues.getLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: losLabel,
-            }).catch(async () => {
-              github.rest.issues.createLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                name: losLabel,
-                color: '81db8d',
-              }).catch((error) => {
-                console.log(`Failed to create label: ${losLabel}, error: ${error.message}`);
-              });
-            });
+            issuesGenLabel(deviceLabel, 'dcaef5');
+            issuesGenLabel(losLabel, '81db8d');
           }
 
-          // Remove all labels
+          // Remove all labels from issue
           github.rest.issues.removeAllLabels({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            ...repoInfo,
             issue_number: context.issue.number,
           }).catch(error => {
             console.log(`Failed to remove labels: ${error.message}`);
@@ -77,36 +78,29 @@ jobs:
 
           // Validate ticket
           if (losLabel.split('-')[1] !== buildLosVersion || deviceLabel !== buildDeviceName) {
+            //
+            // The issue is invalid !!
+            //
             // Mark issue as invalid
-            github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: ['invalid'],
-            });
+            issuesAddLabels(['invalid']);
 
+            // Send a comment
             github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              ...repoInfo,
               issue_number: context.issue.number,
               body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
             });
           } else {
+            //
+            // The issue is valid !!
+            //
             // Assign issue to a specific user
             github.rest.issues.addAssignees({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              ...repoInfo,
               issue_number: context.issue.number,
               assignees: ['ItsVixano'],
             });
           }
 
-          if (deviceLabel && losLabel) {
-            // Add labels to issue
-            github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: [deviceLabel, losLabel],
-            });
-          }
+          // Add Device & LosVersion labels to issue
+          issuesAddLabels([deviceLabel, losLabel])
