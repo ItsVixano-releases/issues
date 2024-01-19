@@ -10,6 +10,8 @@ body:
 
       - SafetyNet / PlayIntegrity not passing
 
+      - Apps detecting root (Banking apps, etc.)
+
       - Feature requests
 
 
