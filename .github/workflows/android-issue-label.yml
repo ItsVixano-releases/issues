@@ -16,7 +16,6 @@ jobs:
         script: |
           // Vars
           const issueBody = context.payload.issue.body;
-          const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
           const repoInfo = {
             owner: context.repo.owner,
             repo: context.repo.repo
@@ -61,20 +60,17 @@ jobs:
 
           // Create labels if they do not exist
           if (deviceLabel && losLabel) {
-            issuesGenLabel(deviceLabel, 'dcaef5');
-            issuesGenLabel(losLabel, '81db8d');
+            await issuesGenLabel(deviceLabel, 'dcaef5');
+            await issuesGenLabel(losLabel, '81db8d');
           }
 
           // Remove all labels from issue
-          github.rest.issues.removeAllLabels({
+          await github.rest.issues.removeAllLabels({
             ...repoInfo,
             issue_number: context.issue.number,
           }).catch(error => {
             console.log(`Failed to remove labels: ${error.message}`);
           });
-
-          // HACK: sleep for 5 seconds
-          await sleep(5000);
 
           // Validate ticket
           if (losLabel.split('-')[1] !== buildLosVersion || deviceLabel !== buildDeviceName) {
@@ -82,17 +78,17 @@ jobs:
             // The issue is invalid !!
             //
             // Mark issue as invalid
-            issuesAddLabels(['invalid']);
+            await issuesAddLabels(['invalid']);
 
             // Send a comment
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               ...repoInfo,
               issue_number: context.issue.number,
               body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
             });
 
             // Close the issue
-            github.rest.issues.update({
+            await github.rest.issues.update({
               ...repoInfo,
               issue_number: context.issue.number,
               state: 'closed',
@@ -103,19 +99,19 @@ jobs:
             // The issue is valid !!
             //
             // Assign issue to a specific user
-            github.rest.issues.addAssignees({
+            await github.rest.issues.addAssignees({
               ...repoInfo,
               issue_number: context.issue.number,
               assignees: ['ItsVixano'],
             });
 
             // Open the issue
-            github.rest.issues.update({
+            await github.rest.issues.update({
               ...repoInfo,
               issue_number: context.issue.number,
               state: 'open',
             });
 
             // Add Device & LosVersion labels to issue
-            issuesAddLabels([deviceLabel, losLabel])
+            await issuesAddLabels([deviceLabel, losLabel])
           }
