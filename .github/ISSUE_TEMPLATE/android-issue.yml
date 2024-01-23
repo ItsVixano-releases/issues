@@ -15,10 +15,13 @@ body:
       - Feature requests
 
 
-      Make sure not to use extra mods when reporting a problem (for example: Magisk)
+      Make sure not to use extra mods when reporting a problem (for example: Magisk).
+
       Make sure you have followed the [guide](https://guide.itsvixano.me/).
 
-      If you need help please check our Telegram group at https://t.me/giostuffs or our Matrix Bridge at https://matrix.to/#/#giostuffs:matrix.org
+      Write the ticket in English and avoid creating multiple tickets.
+
+      If you need help please check our Telegram group at https://t.me/giostuffs or our Matrix Bridge at https://matrix.to/#/#giostuffs:matrix.org.
       '
   type: markdown
 - attributes:
