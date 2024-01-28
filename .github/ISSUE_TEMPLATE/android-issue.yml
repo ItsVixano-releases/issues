@@ -80,8 +80,8 @@ body:
     required: true
 - attributes:
     label: Logs
-    description: If possible, please upload a zip file named `logs.zip` with `pixeldrain.com` containing
-      any relevant logs by following this [guide](https://guide.itsvixano.me/troubleshooting/).
+    description: If possible, please upload a zip file named `logs.zip` by using `[transfer.sh](https://transfer.sh)` or similar services
+      containing any relevant logs by following this [guide](https://guide.itsvixano.me/troubleshooting/).
   type: input
   validations:
     required: false
