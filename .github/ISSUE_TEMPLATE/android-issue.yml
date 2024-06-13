@@ -17,7 +17,7 @@ body:
 
       Make sure not to use extra mods when reporting a problem (for example: Magisk).
 
-      Make sure you have followed the [guide](https://guide.itsvixano.me/).
+      Make sure you have followed the [wiki](https://wiki.itsvixano.me/).
 
       Write the ticket in English and avoid creating multiple tickets.
 
@@ -82,7 +82,7 @@ body:
 - attributes:
     label: Logs
     description: If possible, please upload a zip file named `logs.zip` by using [`pixeldrain.com`](https://pixeldrain.com/), [`oshi.at`](https://oshi.at/)
-      or similar services containing any relevant logs by following this [guide](https://guide.itsvixano.me/troubleshooting/).
+      or similar services containing any relevant logs by following this [guide](https://wiki.itsvixano.me/troubleshooting/).
   type: input
   validations:
     required: false
