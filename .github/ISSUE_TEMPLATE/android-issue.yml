@@ -39,6 +39,7 @@ body:
     options:
     - Select one
     - daisy
+    - gemstone
     - lisa
     - miatoll
     - prague
