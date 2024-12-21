@@ -1,3 +1,5 @@
+name: Bug Report
+description: Create a bug report
 body:
 - attributes:
     value: 'What not to report:
@@ -6,16 +8,14 @@ body:
 
       - Missing Builds
 
-      - Problems with the website
-
       - SafetyNet / PlayIntegrity not passing
 
-      - Apps detecting root (Banking apps, etc.)
+      - Apps detecting root / custom rom usage (Banking apps, etc.)
 
       - Feature requests
 
 
-      Make sure not to use extra mods when reporting a problem (for example: Magisk).
+      Make sure not to use extra mods when reporting a problem (for example: Magisk, Xposed, etc.).
 
       Make sure you have followed the [wiki](https://wiki.itsvixano.me/).
 
@@ -83,9 +83,11 @@ body:
     required: true
 - attributes:
     label: Logs
-    description: If possible, please upload a zip file named `logs.zip` by using [`pixeldrain.com`](https://pixeldrain.com/), [`oshi.at`](https://oshi.at/)
-      or similar services containing any relevant logs by following this [guide](https://wiki.itsvixano.me/troubleshooting/).
-  type: input
+    description: If possible, please attach a zip file named `logs.zip` containing any relevant logs by following
+      this [guide](https://wiki.itsvixano.me/troubleshooting/).
+    value: |
+      <!-- Click on this box. drag and drop the zip file here and wait for it to upload. -->
+  type: textarea
   validations:
     required: false
 - attributes:
@@ -104,5 +106,3 @@ body:
     value: Before posting the issue go through the steps you've written down to make
       sure the steps provided are detailed and clear.
   type: markdown
-description: Create a bug report
-name: Bug Report
