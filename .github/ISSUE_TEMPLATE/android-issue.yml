@@ -42,9 +42,9 @@ body:
     - gemstone
     - lisa
     - miatoll
-    - prague
+    #- prague
     - sakura
-    - stanford
+    #- stanford
     - xaga
     - ysl
   type: dropdown
@@ -56,8 +56,8 @@ body:
     options:
     - Select one
     - lineage-22
-    - lineage-21
-    - lineage-20
+    #- lineage-21
+    #- lineage-20
   type: dropdown
   validations:
     required: true
