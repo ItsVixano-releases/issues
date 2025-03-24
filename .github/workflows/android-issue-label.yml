@@ -8,111 +8,111 @@ jobs:
   labelIssue:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Label issues
-      uses: actions/github-script@v5
-      with:
-        script: |
-          // Vars
-          const issueBody = context.payload.issue.body;
-          const repoInfo = {
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          };
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Label issues
+        uses: actions/github-script@v5
+        with:
+          script: |
+            // Vars
+            const issueBody = context.payload.issue.body;
+            const repoInfo = {
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            };
 
-          // Functions
-          function issuesGenLabel(label, color) {
-            github.rest.issues.getLabel({
-              ...repoInfo,
-              name: label,
-            }).catch(async () => {
-              github.rest.issues.createLabel({
+            // Functions
+            function issuesGenLabel(label, color) {
+              github.rest.issues.getLabel({
                 ...repoInfo,
                 name: label,
-                color: color,
-              }).catch((error) => {
-                console.log(`Failed to create label: ${label}, error: ${error.message}`);
+              }).catch(async () => {
+                github.rest.issues.createLabel({
+                  ...repoInfo,
+                  name: label,
+                  color: color,
+                }).catch((error) => {
+                  console.log(`Failed to create label: ${label}, error: ${error.message}`);
+                });
               });
-            });
-          }
+            }
 
-          function issuesAddLabels(labels) {
-            github.rest.issues.addLabels({
+            function issuesAddLabels(labels) {
+              github.rest.issues.addLabels({
+                ...repoInfo,
+                issue_number: context.issue.number,
+                labels: labels,
+              });
+            }
+
+            // Extract Build Date vars (for safety checks)
+            const buildDateMatch = issueBody.match(/Build Date\s*\n*(\d+(?:\.\d+)?)-(\d+)-(UNOFFICIAL)-(\w+)/i);
+            const buildLosVersion = buildDateMatch ? Math.floor(parseFloat(buildDateMatch[1])).toString() : null;
+            const buildDeviceName = buildDateMatch ? buildDateMatch[4] : null;
+
+            // Extract device label
+            const deviceLabelMatch = issueBody.match(/Device\s*(\w+)/i);
+            const deviceLabel = deviceLabelMatch ? deviceLabelMatch[1] : null;
+
+            // Extract LineageOS Version label
+            const losLabelMatch = issueBody.match(/LineageOS Version\s*([\w-]+)/i);
+            const losLabel = losLabelMatch ? losLabelMatch[1] : null;
+            const normalizedLosVersion = losLabel ? losLabel.split('-')[1].split('.')[0] : null;
+
+            // Create labels if they do not exist
+            if (deviceLabel && losLabel) {
+              await issuesGenLabel(deviceLabel, 'dcaef5');
+              await issuesGenLabel(losLabel, '81db8d');
+            }
+
+            // Remove all labels from issue
+            await github.rest.issues.removeAllLabels({
               ...repoInfo,
               issue_number: context.issue.number,
-              labels: labels,
-            });
-          }
-
-          // Extract Build Date vars (for safety checks)
-          const buildDateMatch = issueBody.match(/Build Date\s*\n*(\d+(?:\.\d+)?)-(\d+)-(UNOFFICIAL)-(\w+)/i);
-          const buildLosVersion = buildDateMatch ? Math.floor(parseFloat(buildDateMatch[1])).toString() : null;
-          const buildDeviceName = buildDateMatch ? buildDateMatch[4] : null;
-
-          // Extract device label
-          const deviceLabelMatch = issueBody.match(/Device\s*(\w+)/i);
-          const deviceLabel = deviceLabelMatch ? deviceLabelMatch[1] : null;
-
-          // Extract LineageOS Version label
-          const losLabelMatch = issueBody.match(/LineageOS Version\s*([\w-]+)/i);
-          const losLabel = losLabelMatch ? losLabelMatch[1] : null;
-          const normalizedLosVersion = losLabel ? losLabel.split('-')[1].split('.')[0] : null;
-
-          // Create labels if they do not exist
-          if (deviceLabel && losLabel) {
-            await issuesGenLabel(deviceLabel, 'dcaef5');
-            await issuesGenLabel(losLabel, '81db8d');
-          }
-
-          // Remove all labels from issue
-          await github.rest.issues.removeAllLabels({
-            ...repoInfo,
-            issue_number: context.issue.number,
-          }).catch(error => {
-            console.log(`Failed to remove labels: ${error.message}`);
-          });
-
-          // Validate ticket
-          if (normalizedLosVersion !== buildLosVersion || deviceLabel !== buildDeviceName) {
-            //
-            // The issue is invalid !!
-            //
-            // Mark issue as invalid
-            await issuesAddLabels(['invalid']);
-
-            // Send a comment
-            await github.rest.issues.createComment({
-              ...repoInfo,
-              issue_number: context.issue.number,
-              body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
+            }).catch(error => {
+              console.log(`Failed to remove labels: ${error.message}`);
             });
 
-            // Close the issue
-            await github.rest.issues.update({
-              ...repoInfo,
-              issue_number: context.issue.number,
-              state: 'closed',
-              state_reason: 'not_planned',
-            });
-          } else {
-            //
-            // The issue is valid !!
-            //
-            // Assign issue to a specific user
-            await github.rest.issues.addAssignees({
-              ...repoInfo,
-              issue_number: context.issue.number,
-              assignees: ['ItsVixano'],
-            });
+            // Validate ticket
+            if (normalizedLosVersion !== buildLosVersion || deviceLabel !== buildDeviceName) {
+              //
+              // The issue is invalid !!
+              //
+              // Mark issue as invalid
+              await issuesAddLabels(['invalid']);
 
-            // Open the issue
-            await github.rest.issues.update({
-              ...repoInfo,
-              issue_number: context.issue.number,
-              state: 'open',
-            });
+              // Send a comment
+              await github.rest.issues.createComment({
+                ...repoInfo,
+                issue_number: context.issue.number,
+                body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
+              });
 
-            // Add Device & LosVersion labels to issue
-            await issuesAddLabels([deviceLabel, losLabel])
-          }
+              // Close the issue
+              await github.rest.issues.update({
+                ...repoInfo,
+                issue_number: context.issue.number,
+                state: 'closed',
+                state_reason: 'not_planned',
+              });
+            } else {
+              //
+              // The issue is valid !!
+              //
+              // Assign issue to a specific user
+              await github.rest.issues.addAssignees({
+                ...repoInfo,
+                issue_number: context.issue.number,
+                assignees: ['ItsVixano'],
+              });
+
+              // Open the issue
+              await github.rest.issues.update({
+                ...repoInfo,
+                issue_number: context.issue.number,
+                state: 'open',
+              });
+
+              // Add Device & LosVersion labels to issue
+              await issuesAddLabels([deviceLabel, losLabel])
+            }

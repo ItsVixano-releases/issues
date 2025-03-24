@@ -1,108 +1,111 @@
 name: Bug Report
 description: Create a bug report
 body:
-- attributes:
-    value: 'What not to report:
+  - attributes:
+      value: "What not to report:
 
-      - Bugs in custom builds or anything not downloaded from [here](https://github.com/ItsVixano-releases)
+        - Bugs in custom builds or anything not downloaded from [here](https://github.com/ItsVixano-releases)
 
-      - Missing Builds
+        - Missing Builds
 
-      - SafetyNet / PlayIntegrity not passing
+        - SafetyNet / PlayIntegrity not passing
 
-      - Apps detecting root / custom rom usage (Banking apps, etc.)
+        - Apps detecting root / custom rom usage (Banking apps, etc.)
 
-      - Feature requests
+        - Feature requests
 
 
-      Make sure not to use extra mods when reporting a problem (for example: Magisk, Xposed, etc.).
+        Make sure not to use extra mods when reporting a problem (for example: Magisk, Xposed, etc.).
 
-      Make sure you have followed the [wiki](https://wiki.itsvixano.me/).
+        Make sure you have followed the [wiki](https://wiki.itsvixano.me/).
 
-      Write the ticket in English and avoid creating multiple tickets.
+        Write the ticket in English and avoid creating multiple tickets.
 
-      If you need help please check our Telegram group at https://t.me/giostuffs or our Matrix Bridge at https://matrix.to/#/#giostuffs:matrix.org.
-      '
-  type: markdown
-- attributes:
-    label: Build Date
-    description: 'The build date of the build currently running on your device
-      (Settings -> Abount Phone -> LineageOS version).
+        If you need help please check our Telegram group at https://t.me/giostuffs or our Matrix Bridge at https://matrix.to/#/#giostuffs:matrix.org.
+        "
+    type: markdown
+  - attributes:
+      label: Build Date
+      description: "The build date of the build currently running on your device
+        (Settings -> Abount Phone -> LineageOS version).
 
-      Example: `21-20240115-UNOFFICIAL-daisy`'
-  type: input
-  validations:
-    required: true
-- attributes:
-    label: Device
-    multiple: false
-    options:
-    - Select one
-    - daisy
-    - gemstone
-    - lisa
-    - miatoll
-    #- prague
-    - sakura
-    #- stanford
-    - xaga
-    - ysl
-  type: dropdown
-  validations:
-    required: true
-- attributes:
-    label: LineageOS Version
-    multiple: false
-    options:
-    - Select one
-    - lineage-22
-    #- lineage-21
-    #- lineage-20
-  type: dropdown
-  validations:
-    required: true
-- attributes:
-    label: Describe the Bug
-    description: A clear and concise description of what the bug is.
-  type: textarea
-  validations:
-    required: true
-- attributes:
-    label: Steps to Reproduce
-    description: Steps to reproduce the behavior, please provide a clear description
-      of how to reproduce the issue, based on the linked minimal reproduction. Screenshots
-      can be provided in the issue body below. If using code blocks, make sure that
-      [syntax highlighting is correct](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting)
-      and double check that the rendered preview is not broken.
-    value: |
-      1.
-      2.
-      3.
-  type: textarea
-  validations:
-    required: true
-- attributes:
-    label: Logs
-    description: If possible, please attach a zip file named `logs.zip` containing any relevant logs by following
-      this [guide](https://wiki.itsvixano.me/troubleshooting/).
-    value: |
-      <!-- Click on this box. drag and drop the zip file here and wait for it to upload. -->
-  type: textarea
-  validations:
-    required: false
-- attributes:
-    label: Expected Behavior
-    description: A clear and concise description of what you expected to happen.
-  type: textarea
-  validations:
-    required: true
-- attributes:
-    label: Possible Solution
-    description: Not obligatory, but suggest a fix/reason for the bug
-  type: textarea
-  validations:
-    required: false
-- attributes:
-    value: Before posting the issue go through the steps you've written down to make
-      sure the steps provided are detailed and clear.
-  type: markdown
+        Example: `21-20240115-UNOFFICIAL-daisy`"
+    type: input
+    validations:
+      required: true
+  - attributes:
+      label: Device
+      multiple: false
+      options:
+        - Select one
+        - daisy
+        - gemstone
+        - lisa
+        - miatoll
+        #- prague
+        - sakura
+        #- stanford
+        - xaga
+        - ysl
+    type: dropdown
+    validations:
+      required: true
+  - attributes:
+      label: LineageOS Version
+      multiple: false
+      options:
+        - Select one
+        - lineage-22
+      #- lineage-21
+      #- lineage-20
+    type: dropdown
+    validations:
+      required: true
+  - attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      label: Steps to Reproduce
+      description:
+        Steps to reproduce the behavior, please provide a clear description
+        of how to reproduce the issue, based on the linked minimal reproduction. Screenshots
+        can be provided in the issue body below. If using code blocks, make sure that
+        [syntax highlighting is correct](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting)
+        and double check that the rendered preview is not broken.
+      value: |
+        1.
+        2.
+        3.
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      label: Logs
+      description:
+        If possible, please attach a zip file named `logs.zip` containing any relevant logs by following
+        this [guide](https://wiki.itsvixano.me/troubleshooting/).
+      value: |
+        <!-- Click on this box. drag and drop the zip file here and wait for it to upload. -->
+    type: textarea
+    validations:
+      required: false
+  - attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      label: Possible Solution
+      description: Not obligatory, but suggest a fix/reason for the bug
+    type: textarea
+    validations:
+      required: false
+  - attributes:
+      value:
+        Before posting the issue go through the steps you've written down to make
+        sure the steps provided are detailed and clear.
+    type: markdown
