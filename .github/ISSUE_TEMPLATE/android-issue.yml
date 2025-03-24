@@ -6,11 +6,11 @@ body:
 
         - Bugs in custom builds or anything not downloaded from [here](https://github.com/ItsVixano-releases)
 
-        - Missing Builds
+        - Requests for missing builds
 
-        - SafetyNet / PlayIntegrity not passing
+        - SafetyNet / Play Integrity failures
 
-        - Apps detecting root / custom rom usage (Banking apps, etc.)
+        - Issues with apps detecting root or custom ROM usage (e.g., banking apps)
 
         - Feature requests
 
@@ -18,6 +18,10 @@ body:
         Make sure not to use extra mods when reporting a problem (for example: Magisk, Xposed, etc.).
 
         Make sure you have followed the [wiki](https://wiki.itsvixano.me/).
+
+        Make sure you are running the latest version of the ROM available for your device.
+
+        Make sure there are no similar issues already opened [here](https://github.com/ItsVixano-releases/issues).
 
         Write the ticket in English and avoid creating multiple tickets.
 
