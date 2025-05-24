@@ -42,16 +42,16 @@ body:
       multiple: false
       options:
         - Select one
-        - daisy
+        #- daisy
         #- gemstone
         - lisa
         - miatoll
         - nairo
         #- prague
-        - sakura
+        #- sakura
         #- stanford
         - xaga
-        - ysl
+        #- ysl
     type: dropdown
     validations:
       required: true
