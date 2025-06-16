@@ -43,6 +43,7 @@ body:
       options:
         - Select one
         #- daisy
+        - dodge
         #- gemstone
         - lisa
         - miatoll
@@ -50,6 +51,7 @@ body:
         #- prague
         #- sakura
         #- stanford
+        - venus
         - xaga
         #- ysl
     type: dropdown
