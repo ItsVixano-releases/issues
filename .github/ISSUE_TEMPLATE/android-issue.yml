@@ -44,9 +44,9 @@ body:
         - Select one
         #- daisy
         - dodge
-        #- gemstone
+        - gemstone
         - lisa
-        - miatoll
+        #- miatoll
         - nairo
         #- prague
         #- sakura
@@ -64,9 +64,9 @@ body:
       options:
         - Select one
         - lineage-23
-        - lineage-22
-      #- lineage-21
-      #- lineage-20
+        #- lineage-22
+        #- lineage-21
+        #- lineage-20
     type: dropdown
     validations:
       required: true
