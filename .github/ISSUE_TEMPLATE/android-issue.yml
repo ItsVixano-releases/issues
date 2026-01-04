@@ -29,11 +29,11 @@ body:
         "
     type: markdown
   - attributes:
-      label: Build Date
-      description: "The build date of the build currently running on your device
+      label: LineageOS version
+      description: "The LineageOS build currently running on your device
         (Settings -> Abount Phone -> LineageOS version).
 
-        Example: `21-20240115-UNOFFICIAL-daisy`"
+        Example: `23.1-20251224-UNOFFICIAL-dodge`"
     type: input
     validations:
       required: true
@@ -55,18 +55,6 @@ body:
         - venus
         - xaga
         #- ysl
-    type: dropdown
-    validations:
-      required: true
-  - attributes:
-      label: LineageOS Version
-      multiple: false
-      options:
-        - Select one
-        - lineage-23
-        #- lineage-22
-        #- lineage-21
-        #- lineage-20
     type: dropdown
     validations:
       required: true

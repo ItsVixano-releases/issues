@@ -45,19 +45,17 @@ jobs:
               });
             }
 
-            // Extract Build Date vars (for safety checks)
-            const buildDateMatch = issueBody.match(/Build Date\s*\n*(\d+(?:\.\d+)?)-(\d+)-(UNOFFICIAL)-(\w+)/i);
-            const buildLosVersion = buildDateMatch ? Math.floor(parseFloat(buildDateMatch[1])).toString() : null;
-            const buildDeviceName = buildDateMatch ? buildDateMatch[4] : null;
+            // Extract LineageOS version vars (for safety checks)
+            const losVersionMatch = issueBody.match(/LineageOS version\s*\n*(\d+(?:\.\d+)?)-(\d+)-(UNOFFICIAL)-(\w+)/i);
+            const losVersion = losVersionMatch ? Math.floor(parseFloat(losVersionMatch[1])).toString() : null;
+            const buildDeviceName = losVersionMatch ? losVersionMatch[4] : null;
 
             // Extract device label
             const deviceLabelMatch = issueBody.match(/Device\s*(\w+)/i);
             const deviceLabel = deviceLabelMatch ? deviceLabelMatch[1] : null;
 
-            // Extract LineageOS Version label
-            const losLabelMatch = issueBody.match(/LineageOS Version\s*([\w-]+)/i);
-            const losLabel = losLabelMatch ? losLabelMatch[1] : null;
-            const normalizedLosVersion = losLabel ? losLabel.split('-')[1].split('.')[0] : null;
+            // Generate LineageOS Version label from the version string
+            const losLabel = losVersion ? `lineage-${losVersion}` : null;
 
             // Create labels if they do not exist
             if (deviceLabel && losLabel) {
@@ -74,7 +72,7 @@ jobs:
             });
 
             // Validate ticket
-            if (normalizedLosVersion !== buildLosVersion || deviceLabel !== buildDeviceName) {
+            if (!losVersion || deviceLabel !== buildDeviceName) {
               //
               // The issue is invalid !!
               //
@@ -85,7 +83,7 @@ jobs:
               await github.rest.issues.createComment({
                 ...repoInfo,
                 issue_number: context.issue.number,
-                body: "The `Build Date` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
+                body: "The `LineageOS version` or the labels contains invalid information.\n\nPlease edit the ticket report with valid information.",
               });
 
               // Close the issue
