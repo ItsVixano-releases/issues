@@ -38,27 +38,6 @@ body:
     validations:
       required: true
   - attributes:
-      label: Device
-      multiple: false
-      options:
-        - Select one
-        #- daisy
-        - dodge
-        - gemstone
-        - lisa
-        #- miatoll
-        - nairo
-        #- prague
-        #- sakura
-        #- stanford
-        - tiro
-        - venus
-        - xaga
-        #- ysl
-    type: dropdown
-    validations:
-      required: true
-  - attributes:
       label: Describe the Bug
       description: A clear and concise description of what the bug is.
     type: textarea
