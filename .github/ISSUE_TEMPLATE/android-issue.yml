@@ -15,7 +15,16 @@ body:
         - Feature requests.
 
 
-        Make sure not to use extra mods when reporting a problem (for example: Magisk, Xposed, etc.).
+        Make sure not to use extra mods while reporting an issue. This includes (but not limited to) the following:
+
+        - **Magisk/KernelSU/Apatch...** (It modifies the ramdisk/kernel).
+
+        - **Substratum/Repainter** (It modifies the frameworks).
+
+        - **Xposed/LSposed** (It breaks the Android APIs).
+
+        - **Any flashable addons that modify the system partitions** ([MindTheGapps](https://github.com/MindTheGapps) is excluded from this list).
+
 
         Make sure you have followed the [wiki](https://wiki.itsvixano.me/).
 
