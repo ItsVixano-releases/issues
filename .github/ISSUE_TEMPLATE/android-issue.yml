@@ -4,7 +4,7 @@ body:
   - attributes:
       value: "What not to report:
 
-        - Bugs in custom builds or anything not downloaded from [here](https://github.com/ItsVixano-releases)
+        - Bugs in custom builds or anything not downloaded from [here](https://files.itsvixano.me/lineage)
 
         - Requests for missing builds
 
