@@ -4,15 +4,15 @@ body:
   - attributes:
       value: "What not to report:
 
-        - Bugs in custom builds or anything not downloaded from [here](https://files.itsvixano.me/lineage)
+        - Bugs in custom builds or anything not downloaded from [here](https://files.itsvixano.me/lineage).
 
-        - Requests for missing builds
+        - Requests for missing builds.
 
-        - SafetyNet / Play Integrity failures
+        - SafetyNet / Play Integrity failures.
 
-        - Issues with apps detecting root or custom ROM usage (e.g., banking apps)
+        - Issues with apps detecting root or custom ROM usage (e.g., banking apps).
 
-        - Feature requests
+        - Feature requests.
 
 
         Make sure not to use extra mods when reporting a problem (for example: Magisk, Xposed, etc.).
